@@ -24,8 +24,8 @@ var rootCmd = RootCmd()
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "ghid [options] <hash>",
-		Short: "Ghid — Golang Hash Identifier is a sample Go application, a port of the Haiti app originally written in Rust.",
-		Long:  "Ghid — Golang Hash Identifier is a sample Go application, a port of the Haiti app originally written in Rust.",
+		Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti HashId program and others.",
+		Long:  "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti HashId program and others.",
 		Args:  cobra.ArbitraryArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 0 {
