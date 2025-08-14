@@ -1,1 +1,1 @@
-# ghid
+# Ghid — Golang Hash Identifier
