@@ -43,7 +43,7 @@ func RootCmd() *cobra.Command {
 		},
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if flags.VersionFlag {
-				fmt.Println("Version: ", data.VERSION)
+				fmt.Println(data.VERSION)
 				os.Exit(0)
 			}
 			if flags.NoColorFlag {
