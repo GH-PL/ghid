@@ -23,7 +23,7 @@
 | `ghid -j <hash>` or `ghid --john-only <hash>` | Show only John the Ripper references. |
 | `ghid -e <hash>` or `ghid --extended <hash>` | List all possible hash algorithms, including those using salt. |
 | `ghid -v` or `ghid --version` | Show version information. |
-| `ghid -n` or `ghid --no-color` | Disable color output. |
+| `ghid -n` or `ghid --no-color [command]` | Disable color output. |
 
 ---
 
