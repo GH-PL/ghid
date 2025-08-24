@@ -37,6 +37,11 @@ func RootCmd() *cobra.Command {
 						Style:          []color.Attribute{color.Bold},
 					})
 				}
+				utils.PrintColorText(&utils.Text{
+					Text:           "You need extended mode",
+					ColorAttribute: color.BgYellow,
+					Style:          []color.Attribute{color.Bold},
+				})
 			} else {
 				cmd.Help()
 				return
