@@ -30,19 +30,21 @@ func RootCmd() *cobra.Command {
 		Args:  cobra.ArbitraryArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 0 {
-				if !showHashValue(args) {
+				showResult := showHashValue(args)
+				if !showResult {
 					utils.PrintColorText(&utils.Text{
 						Text:           "Not found type for this Hash",
 						ColorAttribute: color.FgRed,
 						Style:          []color.Attribute{color.Bold},
 					})
-				}else {
+				} else if !flags.Extended && showResult {
 					utils.PrintColorText(&utils.Text{
 						Text:           "You need extended mode",
 						ColorAttribute: color.BgYellow,
 						Style:          []color.Attribute{color.Bold},
 					})
 				}
+
 			} else {
 				cmd.Help()
 				return
