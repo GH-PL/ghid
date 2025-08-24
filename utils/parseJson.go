@@ -23,7 +23,7 @@ func loadJson(filePath string, v interface{}) {
 
 func ParseJson() []data.Hash {
 	var hashes []data.Hash
-	loadJson("data/data.json", &hashes)
+	loadJson(data.WAY_DATA_JSON, &hashes)
 	return hashes
 }
 
@@ -31,7 +31,7 @@ var PopularHashesSet map[string]struct{}
 
 func LoadPopularHashes() {
 	var popularList []string
-	loadJson("data/popularHash.json", &popularList)
+	loadJson(data.WAY_POPULAR_HASH_JSON, &popularList)
 
 	PopularHashesSet = make(map[string]struct{})
 	for _, name := range popularList {
