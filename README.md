@@ -1,4 +1,4 @@
-# Ghid — Golang Hash Identifier
+# Ghid — Golang Hash IDentifier
 
 **Ghid** is a lightweight CLI tool for identifying the type of a given hash string using Go.
 
