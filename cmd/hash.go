@@ -31,7 +31,6 @@ func showHashValue(args []string) bool {
 			found = true
 			for _, modes := range hashValue.Modes {
 				if !flags.Extended && !isSimpleHash(modes.Name) {
-					found = false
 					continue
 				}
 				switch {
