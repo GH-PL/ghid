@@ -1,14 +1,15 @@
 package cmd
 
 import (
-	"HaitiGo/flags"
 	"fmt"
 	"os"
 
-	"github.com/GH-PL/ghid/command"
-	"github.com/GH-PL/ghid/data"
+	"ghid/flags"
 
-	"github.com/GH-PL/ghid/utils"
+	"ghid/command"
+	"ghid/data"
+
+	"ghid/utils"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -24,8 +25,8 @@ var rootCmd = RootCmd()
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "ghid [options] <hash>",
-		Short: "Ghid — Golang Hash Identifier — is a simple program for identifying hash types.",
-		Long:  "Ghid — Golang Hash Identifier — is a simple program for identifying hash types.",
+		Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
+		Long:  "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
 		Args:  cobra.ArbitraryArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) != 0 {
@@ -41,11 +42,14 @@ func RootCmd() *cobra.Command {
 				return
 			}
 		},
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		PreRun: func(cmd *cobra.Command, args []string) {
 			if flags.VersionFlag {
 				fmt.Println(data.VERSION)
 				os.Exit(0)
 			}
+		},
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+
 			if flags.NoColorFlag {
 				utils.DisableColorOutput()
 			}
