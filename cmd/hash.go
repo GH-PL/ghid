@@ -52,26 +52,22 @@ func showHashValue(args []string) bool {
 }
 
 func printMode(modes data.Modes) {
-
-	txt1 := fmt.Sprintf("- %s\n", modes.Name)
 	utils.PrintColorText(&utils.Text{
-		Text:           txt1,
+		Text:           fmt.Sprintf("- %s\n", modes.Name),
 		ColorAttribute: color.FgGreen,
 		Style:          []color.Attribute{color.Bold},
 	})
 
 	if modes.Hashcat != nil {
-		txt2 := fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat)
 		utils.PrintColorText(&utils.Text{
-			Text:           txt2,
+			Text:           fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat),
 			ColorAttribute: color.FgGreen,
 			Style:          []color.Attribute{color.Bold},
 		})
 	}
 	if modes.John != nil {
-		txt3 := fmt.Sprintf("  John: %s\n", *modes.John)
 		utils.PrintColorText(&utils.Text{
-			Text:           txt3,
+			Text:           fmt.Sprintf("  John: %s\n", *modes.John),
 			ColorAttribute: color.FgGreen,
 			Style:          []color.Attribute{color.Bold},
 		})
@@ -85,22 +81,18 @@ func isSimpleHash(name string) bool {
 
 func printModeField(label string, name *string) {
 	if name == nil {
-		txt := fmt.Sprintf("  %s: not available\n", label)
 		utils.PrintColorText(&utils.Text{
-			Text:           txt,
+			Text:           fmt.Sprintf("  %s: not available\n", label),
 			ColorAttribute: color.FgYellow,
 			Style:          []color.Attribute{color.Bold},
 		})
 		return
 	}
-
-	txt := fmt.Sprintf("  %s: %s\n", label, *name)
 	utils.PrintColorText(&utils.Text{
-		Text:           txt,
+		Text:           fmt.Sprintf("  %s: %s\n", label, *name),
 		ColorAttribute: color.FgGreen,
 		Style:          []color.Attribute{color.Bold},
 	})
-
 }
 
 func uintToStr(uInt *uint) *string {
