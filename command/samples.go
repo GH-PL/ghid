@@ -11,10 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type SamplesInterface interface {
-	samples()
-}
-
 var SamplesCmd = &cobra.Command{
 	Use:   "samples [NAME HASH]",
 	Short: "Display hash samples for the given type",
