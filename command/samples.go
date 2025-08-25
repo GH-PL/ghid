@@ -63,10 +63,8 @@ func samples(str string) {
 		}
 	}
 	if !found {
-		strTo := fmt.Sprintf("Not found %s", str)
-
 		utils.PrintColorText(&utils.Text{
-			Text:           strTo,
+			Text:           fmt.Sprintf("Not found %s", str),
 			ColorAttribute: color.FgRed,
 			Style:          []color.Attribute{color.Bold},
 		})
