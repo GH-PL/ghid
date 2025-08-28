@@ -1,11 +1,23 @@
 package errHandler
-import(
-  "log"
+
+import (
+	"errors"
+	"fmt"
+	"ghid/output"
+	"log"
 	"os"
 	"syscall"
-  "errors"
-	"fmt"
+
+	"github.com/fatih/color"
 )
+
+func Show(err error) {
+	output.PrintColorText(&output.Text{
+		Text:           err.Error(),
+		ColorAttribute: color.FgRed,
+		Style:          []color.Attribute{color.Bold},
+	})
+}
 
 type IsERROR struct {
 	Err error
