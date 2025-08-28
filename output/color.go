@@ -27,3 +27,19 @@ func PrintColorText(txt *Text) {
 	outLine := color.New(attributes...)
 	outLine.Println(txt.Text)
 }
+
+func PrintWarning(msg string) {
+	PrintColorText(&Text{
+		Text:           msg,
+		ColorAttribute: color.BgYellow,
+		Style:          []color.Attribute{color.Bold},
+	})
+
+}
+func PrintError(err error) {
+	PrintColorText(&Text{
+		Text:           err.Error(),
+		ColorAttribute: color.FgRed,
+		Style:          []color.Attribute{color.Bold},
+	})
+}
