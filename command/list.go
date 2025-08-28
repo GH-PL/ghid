@@ -29,11 +29,7 @@ func showList() {
 	}
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-			output.PrintColorText(&output.Text{
-				Text:           mode.Name,
-				ColorAttribute: color.FgBlue,
-				Style:          []color.Attribute{color.Bold},
-			})
+			output.PrintBlueText(mode.Name)
 		}
 	}
 }
