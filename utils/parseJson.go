@@ -12,12 +12,12 @@ func loadJson(filePath string, v interface{}) {
 
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0)
 	if err != nil {
-		errHandler.ToError(err, filePath) // IsError -> log.Fatal
+		errHandler.ErrorFile("open file", filePath, err)
 	}
 	defer file.Close()
 
 	if errDecode := json.NewDecoder(file).Decode(v); errDecode != nil {
-		errHandler.ToError(errDecode, filePath) // IsError -> log.Fatal
+		errHandler.ErrorFile("decode", filePath, errDecode)
 	}
 }
 
