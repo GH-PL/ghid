@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"ghid/errHandler"
 	"ghid/flags"
 	"ghid/output"
 
 	"ghid/command"
 	"ghid/data"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -23,31 +23,24 @@ var rootCmd = RootCmd()
 
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "ghid [options] <hash>",
+		Use:   "ghid [command] [flags] <hash>",
 		Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
 		Long:  "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
 		Args:  cobra.ArbitraryArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) != 0 {
-				showResult := showHashValue(args)
-				if !showResult {
-					output.PrintColorText(&output.Text{
-						Text:           "Not found type for this Hash",
-						ColorAttribute: color.FgRed,
-						Style:          []color.Attribute{color.Bold},
-					})
-				} else if !flags.Extended && showResult {
-					output.PrintColorText(&output.Text{
-						Text:           "You need extended mode",
-						ColorAttribute: color.BgYellow,
-						Style:          []color.Attribute{color.Bold},
-					})
-				}
-
-			} else {
+			if len(args) < 1 {
 				cmd.Help()
 				return
 			}
+			matchHash := matchHashTypes(args)
+			if !matchHash {
+				output.PrintError(errHandler.ErrNotFoundHash)
+			} else {
+				if !flags.Extended {
+					output.PrintWarning("You need extended mode")
+				}
+			}
+
 		},
 		PreRun: func(cmd *cobra.Command, args []string) {
 			if flags.VersionFlag {
@@ -68,7 +61,6 @@ func RootCmd() *cobra.Command {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Printf("root command: %s\n", err)
 		os.Exit(1)
 	}
 }
