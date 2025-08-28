@@ -1,8 +1,9 @@
 package command
 
 import (
-	"github.com/GH-PL/ghid/flags"
-	"github.com/GH-PL/ghid/utils"
+	"ghid/flags"
+	"ghid/output"
+	"ghid/utils"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -24,11 +25,11 @@ func init() {
 func showList() {
 	hash := utils.ParseJson()
 	if color.NoColor {
-		utils.DisableColorOutput()
+		output.DisableColorOutput()
 	}
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-			utils.PrintColorText(&utils.Text{
+			output.PrintColorText(&output.Text{
 				Text:           mode.Name,
 				ColorAttribute: color.FgBlue,
 				Style:          []color.Attribute{color.Bold},
