@@ -10,15 +10,13 @@ import (
 	"ghid/flags"
 	"ghid/output"
 	"ghid/utils"
-
-	"github.com/fatih/color"
 )
 
 func init() {
 	utils.LoadPopularHashes()
 }
 
-func showHashValue(args []string) bool {
+func matchHashTypes(args []string) bool {
 	found := false
 	hashes := utils.ParseJson()
 
@@ -54,26 +52,13 @@ func showHashValue(args []string) bool {
 }
 
 func printMode(modes data.Modes) {
-
-	output.PrintColorText(&output.Text{
-		Text:           fmt.Sprintf("- %s\n", modes.Name),
-		ColorAttribute: color.FgGreen,
-		Style:          []color.Attribute{color.Bold},
-	})
+	output.PrintGreenText(fmt.Sprintf("- %s\n", modes.Name))
 
 	if modes.Hashcat != nil {
-		output.PrintColorText(&output.Text{
-			Text:           fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat),
-			ColorAttribute: color.FgGreen,
-			Style:          []color.Attribute{color.Bold},
-		})
+		output.PrintGreenText(fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat))
 	}
 	if modes.John != nil {
-		output.PrintColorText(&output.Text{
-			Text:           fmt.Sprintf("  John: %s\n", *modes.John),
-			ColorAttribute: color.FgGreen,
-			Style:          []color.Attribute{color.Bold},
-		})
+		output.PrintGreenText(fmt.Sprintf("  John: %s\n", *modes.John))
 	}
 }
 
@@ -84,20 +69,10 @@ func isSimpleHash(name string) bool {
 
 func printModeField(label string, name *string) {
 	if name == nil {
-		output.PrintColorText(&output.Text{
-			Text:           fmt.Sprintf("  %s: not available\n", label),
-			ColorAttribute: color.FgYellow,
-			Style:          []color.Attribute{color.Bold},
-		})
+		output.PrintWarning(fmt.Sprintf("  %s: not available\n", label))
 		return
 	}
-
-	output.PrintColorText(&output.Text{
-		Text:           fmt.Sprintf("  %s: %s\n", label, *name),
-		ColorAttribute: color.FgGreen,
-		Style:          []color.Attribute{color.Bold},
-	})
-
+	output.PrintGreenText(fmt.Sprintf("  %s: %s\n", label, *name))
 }
 
 func uintToStr(uInt *uint) *string {
