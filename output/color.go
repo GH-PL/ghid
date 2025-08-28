@@ -43,3 +43,20 @@ func PrintError(err error) {
 		Style:          []color.Attribute{color.Bold},
 	})
 }
+
+func PrintBlueText(msg string) {
+	PrintColorText(&Text{
+		Text:           msg,
+		ColorAttribute: color.FgBlue,
+		Style:          []color.Attribute{color.Bold},
+	})
+
+}
+func PrintGreenText(msg string) {
+	PrintColorText(&Text{
+		Text:           msg,
+		ColorAttribute: color.FgGreen,
+		Style:          []color.Attribute{color.Bold},
+	})
+
+}
