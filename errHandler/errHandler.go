@@ -9,12 +9,19 @@ import (
 	"syscall"
 )
 
-type IsERROR struct {
+type isERROR struct {
 	Err error
 	Msg string
 }
 
-func IsError(err *IsERROR) {
+func ToError(err error, msg string) {
+	isError(&isERROR{
+		Err: err,
+		Msg: msg,
+	})
+}
+
+func isError(err *isERROR) {
 	if os.IsPermission(err.Err) {
 		output.PrintError(fmt.Errorf("Permission denied for file: %s", err.Msg))
 	}
