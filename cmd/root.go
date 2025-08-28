@@ -5,11 +5,10 @@ import (
 	"os"
 
 	"ghid/flags"
+	"ghid/output"
 
 	"ghid/command"
 	"ghid/data"
-
-	"ghid/utils"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -32,13 +31,13 @@ func RootCmd() *cobra.Command {
 			if len(args) != 0 {
 				showResult := showHashValue(args)
 				if !showResult {
-					utils.PrintColorText(&utils.Text{
+					output.PrintColorText(&output.Text{
 						Text:           "Not found type for this Hash",
 						ColorAttribute: color.FgRed,
 						Style:          []color.Attribute{color.Bold},
 					})
 				} else if !flags.Extended && showResult {
-					utils.PrintColorText(&utils.Text{
+					output.PrintColorText(&output.Text{
 						Text:           "You need extended mode",
 						ColorAttribute: color.BgYellow,
 						Style:          []color.Attribute{color.Bold},
@@ -59,7 +58,7 @@ func RootCmd() *cobra.Command {
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 
 			if flags.NoColorFlag {
-				utils.DisableColorOutput()
+				output.DisableColorOutput()
 			}
 		},
 	}
