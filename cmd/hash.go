@@ -6,9 +6,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/GH-PL/ghid/data"
-	"github.com/GH-PL/ghid/flags"
-	"github.com/GH-PL/ghid/utils"
+	"ghid/data"
+	"ghid/flags"
+	"ghid/output"
+	"ghid/utils"
 
 	"github.com/fatih/color"
 )
@@ -30,6 +31,7 @@ func showHashValue(args []string) bool {
 			}
 			found = true
 			for _, modes := range hashValue.Modes {
+
 				if !flags.Extended && !isSimpleHash(modes.Name) {
 					continue
 				}
@@ -52,21 +54,22 @@ func showHashValue(args []string) bool {
 }
 
 func printMode(modes data.Modes) {
-	utils.PrintColorText(&utils.Text{
+
+	output.PrintColorText(&output.Text{
 		Text:           fmt.Sprintf("- %s\n", modes.Name),
 		ColorAttribute: color.FgGreen,
 		Style:          []color.Attribute{color.Bold},
 	})
 
 	if modes.Hashcat != nil {
-		utils.PrintColorText(&utils.Text{
+		output.PrintColorText(&output.Text{
 			Text:           fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat),
 			ColorAttribute: color.FgGreen,
 			Style:          []color.Attribute{color.Bold},
 		})
 	}
 	if modes.John != nil {
-		utils.PrintColorText(&utils.Text{
+		output.PrintColorText(&output.Text{
 			Text:           fmt.Sprintf("  John: %s\n", *modes.John),
 			ColorAttribute: color.FgGreen,
 			Style:          []color.Attribute{color.Bold},
@@ -81,18 +84,20 @@ func isSimpleHash(name string) bool {
 
 func printModeField(label string, name *string) {
 	if name == nil {
-		utils.PrintColorText(&utils.Text{
+		output.PrintColorText(&output.Text{
 			Text:           fmt.Sprintf("  %s: not available\n", label),
 			ColorAttribute: color.FgYellow,
 			Style:          []color.Attribute{color.Bold},
 		})
 		return
 	}
-	utils.PrintColorText(&utils.Text{
+
+	output.PrintColorText(&output.Text{
 		Text:           fmt.Sprintf("  %s: %s\n", label, *name),
 		ColorAttribute: color.FgGreen,
 		Style:          []color.Attribute{color.Bold},
 	})
+
 }
 
 func uintToStr(uInt *uint) *string {
