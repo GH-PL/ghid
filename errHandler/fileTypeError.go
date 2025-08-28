@@ -18,6 +18,7 @@ func ErrorFile(operation string, path string, err error) {
 		Err:       err,
 	}
 	output.PrintError(txtErr.Error())
+	log.Fatal("Error. App not work")
 }
 
 func (e *FileError) Error() error {
