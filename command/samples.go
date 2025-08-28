@@ -20,7 +20,7 @@ var SamplesCmd = &cobra.Command{
 	SilenceUsage:  true,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			errHandler.Show(errHandler.ErrEmptyArgument)
+			output.PrintError(errHandler.ErrEmptyArgument)
 			cmd.Usage()
 		} else {
 			samples(args[0])
@@ -44,19 +44,11 @@ func samples(str string) {
 				continue
 			}
 			if len(mode.Samples) == 0 {
-				output.PrintColorText(&output.Text{
-					Text:           "No examples found",
-					ColorAttribute: color.FgRed,
-					Style:          []color.Attribute{color.Bold},
-				})
+				output.PrintError(errHandler.ErrNotExampleFound)
 				continue
 			}
 			for _, samplesValue := range mode.Samples {
-				output.PrintColorText(&output.Text{
-					Text:           samplesValue,
-					ColorAttribute: color.FgBlue,
-					Style:          []color.Attribute{color.Bold},
-				})
+				output.PrintBlueText(samplesValue)
 			}
 		}
 	}
