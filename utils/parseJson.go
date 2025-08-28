@@ -2,22 +2,28 @@ package utils
 
 import (
 	"encoding/json"
-	"log"
+	"ghid/data"
+	"ghid/errHandler"
 	"os"
 	"strings"
-
-	"github.com/GH-PL/ghid/data"
 )
 
 func loadJson(filePath string, v interface{}) {
-	file, errFile := os.Open(filePath)
-	if errFile != nil {
-		log.Fatalf("Error opening %s: %v", filePath, errFile)
+
+	file, err := os.OpenFile(filePath, os.O_RDONLY, 0)
+	if err != nil {
+		errHandler.IsError(&errHandler.IsERROR{
+			Err: err,
+			Msg: filePath,
+		}) // IsError -> log.Fatal
 	}
 	defer file.Close()
 
 	if errDecode := json.NewDecoder(file).Decode(v); errDecode != nil {
-		log.Fatalf("JSON decode error in %s: %v", filePath, errDecode)
+		errHandler.IsError(&errHandler.IsERROR{
+			Err: errDecode,
+			Msg: filePath,
+		}) // IsError -> log.Fatal
 	}
 }
 
