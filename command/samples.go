@@ -1,11 +1,11 @@
 package command
 
 import (
-	"errors"
 	"strings"
 
-	"ghid/err"
+	"ghid/errHandler"
 	"ghid/flags"
+	"ghid/output"
 	"ghid/utils"
 
 	"github.com/fatih/color"
@@ -20,15 +20,16 @@ var SamplesCmd = &cobra.Command{
 	SilenceUsage:  true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			err.Show(err.ErrEmptyArgument)
+			errHandler.Show(errHandler.ErrEmptyArgument)
 			cmd.Usage()
 			return nil
 		}
 		if errSamples := samples(args[0]); errSamples != nil {
-			if errors.Is(errSamples, err.ErrNoSamplesFound) {
-				err.Show(err.ErrNoSamplesFound)
-				return nil
-			}
+
+			errHandler.IsError(&errHandler.IsERROR{
+				Err: errSamples,
+				Msg: args[0],
+			})
 			return errSamples
 		}
 		return nil
@@ -42,7 +43,7 @@ func init() {
 func samples(str string) error {
 	hash := utils.ParseJson()
 	if color.NoColor {
-		utils.DisableColorOutput()
+		output.DisableColorOutput()
 	}
 
 	for _, hashValue := range hash {
@@ -52,10 +53,15 @@ func samples(str string) error {
 				continue
 			}
 			if len(mode.Samples) == 0 {
-				return err.ErrNoSamplesFound
+				output.PrintColorText(&output.Text{
+					Text:           "No examples found",
+					ColorAttribute: color.FgRed,
+					Style:          []color.Attribute{color.Bold},
+				})
+				continue
 			}
 			for _, samplesValue := range mode.Samples {
-				utils.PrintColorText(&utils.Text{
+				output.PrintColorText(&output.Text{
 					Text:           samplesValue,
 					ColorAttribute: color.FgBlue,
 					Style:          []color.Attribute{color.Bold},
@@ -64,5 +70,5 @@ func samples(str string) error {
 			return nil
 		}
 	}
-	return err.ErrNoSamplesFound
+	return nil
 }
