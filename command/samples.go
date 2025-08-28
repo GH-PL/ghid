@@ -18,21 +18,13 @@ var SamplesCmd = &cobra.Command{
 	Long:          "Display hash samples for the given type",
 	SilenceErrors: true,
 	SilenceUsage:  true,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			errHandler.Show(errHandler.ErrEmptyArgument)
 			cmd.Usage()
-			return nil
+		} else {
+			samples(args[0])
 		}
-		if errSamples := samples(args[0]); errSamples != nil {
-
-			errHandler.IsError(&errHandler.IsERROR{
-				Err: errSamples,
-				Msg: args[0],
-			})
-			return errSamples
-		}
-		return nil
 	},
 }
 
@@ -40,7 +32,7 @@ func init() {
 	flags.AddBoolFlags(SamplesCmd, flags.BoolFlags)
 }
 
-func samples(str string) error {
+func samples(str string) {
 	hash := utils.ParseJson()
 	if color.NoColor {
 		output.DisableColorOutput()
@@ -48,7 +40,6 @@ func samples(str string) error {
 
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-
 			if !strings.EqualFold(str, mode.Name) {
 				continue
 			}
@@ -67,8 +58,7 @@ func samples(str string) error {
 					Style:          []color.Attribute{color.Bold},
 				})
 			}
-			return nil
 		}
 	}
-	return nil
+
 }
