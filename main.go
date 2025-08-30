@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/GH-PL/ghid/cmd"
+	"ghid/cmd"
 )
 
 func main() {

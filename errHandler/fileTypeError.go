@@ -3,6 +3,7 @@ package errHandler
 import (
 	"fmt"
 	"ghid/output"
+	"log"
 )
 
 type FileError struct {
