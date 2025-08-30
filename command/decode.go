@@ -1,7 +1,6 @@
 package command
 
 import (
-	"fmt"
 	"ghid/flags"
 	"ghid/utils"
 	"strings"
@@ -32,21 +31,27 @@ type DecodeData struct {
 	WriterFile string
 }
 
+// if Alica:<hash>, if <hash> --- regex.
 func decode(decodeData *DecodeData) {
 	var result []string
 	for _, value := range utils.ParseTxt(decodeData.OpenFile) {
+		var nameUser, passUser string
 		parts := strings.SplitN(value, ":", 2)
-		if len(parts) != 2 {
-			fmt.Println("Invalid string format")
+		if len(parts) > 2 {
 			continue
 		}
-		var (
+		if len(parts) == 2 {
 			nameUser = parts[0]
 			passUser = parts[1]
-		)
+		}
+		if len(parts) == 1 {
+			nameUser = "unknown"
+			passUser = parts[0]
+		}
+
 		res := nameUser + ":" + passUser
 		result = append(result, res)
 	}
-	fmt.Println(result)
-	fmt.Println(decodeData.WriterFile)
+
+	utils.CreateTxt(decodeData.WriterFile, strings.Join(result, "\n"))
 }
