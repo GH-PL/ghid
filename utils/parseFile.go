@@ -106,12 +106,13 @@ func ParseTxt(filePath string) []string {
 }
 
 func CreateTxt(nameFile string, decrypt string) {
-	filePath := CreateDir(nameFile)
 
 	if nameFile == "" {
 		output.PrintWarning("No file path provided — creating decrypt.txt")
 		nameFile = data.DEFAULT_DECRYPT_FILE
 	}
+
+	filePath := CreateDir(nameFile)
 
 	file, err := os.Create(filePath)
 
