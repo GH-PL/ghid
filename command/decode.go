@@ -38,7 +38,7 @@ func decode(decodeData *DecodeData) {
 		parts := strings.SplitN(value, ":", 2)
 		if len(parts) != 2 {
 			fmt.Println("Invalid string format")
-			return
+			continue
 		}
 		fmt.Println(parts[0])
 		fmt.Println(parts[1])
