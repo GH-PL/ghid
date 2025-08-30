@@ -33,16 +33,20 @@ type DecodeData struct {
 }
 
 func decode(decodeData *DecodeData) {
-	// var res []string
+	var result []string
 	for _, value := range utils.ParseTxt(decodeData.OpenFile) {
 		parts := strings.SplitN(value, ":", 2)
 		if len(parts) != 2 {
 			fmt.Println("Invalid string format")
 			continue
 		}
-		fmt.Println(parts[0])
-		fmt.Println(parts[1])
+		var (
+			nameUser = parts[0]
+			passUser = parts[1]
+		)
+		res := nameUser + ":" + passUser
+		result = append(result, res)
 	}
-
+	fmt.Println(result)
 	fmt.Println(decodeData.WriterFile)
 }
