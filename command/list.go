@@ -1,6 +1,7 @@
 package command
 
 import (
+	"ghid/data"
 	"ghid/flags"
 	"ghid/output"
 	"ghid/utils"
@@ -23,7 +24,7 @@ func init() {
 }
 
 func showList() {
-	hash := utils.ParseJson()
+	hash := utils.ParseJson(data.WAY_DATA_JSON)
 	if color.NoColor {
 		output.DisableColorOutput()
 	}

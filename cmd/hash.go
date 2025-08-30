@@ -14,7 +14,7 @@ import (
 
 func matchHashTypes(args []string) bool {
 	found := false
-	hashes := utils.ParseJson()
+	hashes := utils.ParseJson(data.WAY_DATA_JSON)
 
 	for _, hashValue := range hashes {
 		for _, valueArgs := range args {
@@ -59,7 +59,7 @@ func printMode(modes data.Modes) {
 }
 
 func isSimpleHash(name string) bool {
-	_, ok := utils.ParceCsv()[strings.ToLower(name)]
+	_, ok := utils.ParseCsv(data.WAY_POPULAR_HASH_CSV)[strings.ToLower(name)]
 	return ok
 }
 

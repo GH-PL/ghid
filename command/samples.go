@@ -3,6 +3,7 @@ package command
 import (
 	"strings"
 
+	"ghid/data"
 	"ghid/errHandler"
 	"ghid/flags"
 	"ghid/output"
@@ -33,7 +34,7 @@ func init() {
 }
 
 func samples(str string) {
-	hash := utils.ParseJson()
+	hash := utils.ParseJson(data.WAY_DATA_JSON)
 	if color.NoColor {
 		output.DisableColorOutput()
 	}
