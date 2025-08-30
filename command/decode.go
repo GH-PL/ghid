@@ -31,7 +31,6 @@ type DecodeData struct {
 	WriterFile string
 }
 
-// if Alica:<hash>, if <hash> --- regex.
 func decode(decodeData *DecodeData) {
 	var result []string
 	for _, value := range utils.ParseTxt(decodeData.OpenFile) {
