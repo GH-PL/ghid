@@ -12,10 +12,6 @@ import (
 	"ghid/utils"
 )
 
-func init() {
-	utils.LoadPopularHashes()
-}
-
 func matchHashTypes(args []string) bool {
 	found := false
 	hashes := utils.ParseJson()
@@ -63,7 +59,7 @@ func printMode(modes data.Modes) {
 }
 
 func isSimpleHash(name string) bool {
-	_, ok := utils.PopularHashesSet[strings.ToLower(name)]
+	_, ok := utils.ParceCsv()[strings.ToLower(name)]
 	return ok
 }
 

@@ -8,4 +8,5 @@ var (
 	ErrNotFoundHash    = errors.New("Error: not found type for this Hash")
 	ErrNotExampleFound = errors.New("Error: no examples found")
 	ErrNotFoundName    = errors.New("Error: not found this Hash for name")
+	ErrNotReadFile     = errors.New("Error: file is not read")
 )
