@@ -36,14 +36,13 @@ func decode(decodeData *DecodeData) {
 	for _, value := range utils.ParseTxt(decodeData.OpenFile) {
 		var nameUser, passUser string
 		parts := strings.SplitN(value, ":", 2)
-		if len(parts) > 2 {
+		if len(parts) > 2 || len(parts) == 0 {
 			continue
 		}
 		if len(parts) == 2 {
 			nameUser = parts[0]
 			passUser = parts[1]
-		}
-		if len(parts) == 1 {
+		} else {
 			nameUser = "unknown"
 			passUser = parts[0]
 		}
