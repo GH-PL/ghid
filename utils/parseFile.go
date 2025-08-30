@@ -64,7 +64,7 @@ func ParceCsv() map[string]struct{} {
 		records          = loadCsv(data.WAY_POPULAR_HASH_CSV)
 	)
 
-	// If the CSV file is empty, enable the extended mode and return Extended mode.
+	// If the CSV file is empty, enable the extended mode and return it.
 	if records == nil {
 		output.PrintWarning(fmt.Sprintf("File %s is empty. It will include the extended mode.", data.WAY_POPULAR_HASH_CSV))
 		flags.Extended = true
