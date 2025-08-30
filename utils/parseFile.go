@@ -3,8 +3,11 @@ package utils
 import (
 	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"ghid/data"
 	"ghid/errHandler"
+	"ghid/flags"
+	"ghid/output"
 	"os"
 	"strings"
 )
@@ -61,9 +64,10 @@ func ParceCsv() map[string]struct{} {
 		records          = loadCsv(data.WAY_POPULAR_HASH_CSV)
 	)
 
-	// If there was an error in loading the CSV, return an empty map
+	// If the CSV file is empty, enable the extended mode and return Extended mode.
 	if records == nil {
-		errHandler.ErrorFile("read file", data.WAY_POPULAR_HASH_CSV, errHandler.ErrNotReadFile)
+		output.PrintWarning(fmt.Sprintf("File %s is empty. It will include the extended mode.", data.WAY_POPULAR_HASH_CSV))
+		flags.Extended = true
 	}
 
 	// Loop through each record and add the hash name to the map (converted to lowercase)
