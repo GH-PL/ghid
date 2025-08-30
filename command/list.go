@@ -20,7 +20,7 @@ var ListCmd = &cobra.Command{
 }
 
 func init() {
-	flags.AddBoolFlags(ListCmd, flags.BoolFlags)
+	flags.AddBoolFlags(ListCmd)
 }
 
 func showList() {

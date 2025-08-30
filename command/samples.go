@@ -30,7 +30,7 @@ var SamplesCmd = &cobra.Command{
 }
 
 func init() {
-	flags.AddBoolFlags(SamplesCmd, flags.BoolFlags)
+	flags.AddBoolFlags(SamplesCmd)
 }
 
 func samples(str string) {

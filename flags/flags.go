@@ -1,7 +1,12 @@
 package flags
 
-import "github.com/spf13/cobra"
+import (
+	"ghid/data"
 
+	"github.com/spf13/cobra"
+)
+
+// _________Bool flags___________
 var (
 	VersionFlag bool
 	ShortFlag   bool
@@ -64,12 +69,53 @@ var BoolFlags = []BoolFlagsStruct{
 	},
 }
 
-func AddBoolFlags(cmd *cobra.Command, flags []BoolFlagsStruct) {
-	for _, flag := range flags {
+func AddBoolFlags(cmd *cobra.Command) {
+	for _, flag := range BoolFlags {
 		if flag.Shorthand != "" {
 			cmd.Flags().BoolVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
 		} else {
 			cmd.Flags().BoolVar(flag.Target, flag.Name, flag.Value, flag.Usage)
+		}
+	}
+}
+
+// ________________String flags___________________
+var (
+	OpenFile   string
+	WriterFile string
+)
+
+type StringFlagsStruct struct {
+	Name      string
+	Shorthand string
+	Value     string
+	Usage     string
+	Target    *string
+}
+
+var StringFlags = []StringFlagsStruct{
+	{
+		Name:      "open",
+		Shorthand: "o",
+		Value:     "",
+		Usage:     "Open file",
+		Target:    &OpenFile,
+	},
+	{
+		Name:      "writer",
+		Shorthand: "w",
+		Value:     data.DEFAULT_DECRYPT_FILE,
+		Usage:     "Writer file",
+		Target:    &WriterFile,
+	},
+}
+
+func AddStringFlags(cmd *cobra.Command) {
+	for _, flag := range StringFlags {
+		if flag.Shorthand != "" {
+			cmd.Flags().StringVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
+		} else {
+			cmd.Flags().StringVar(flag.Target, flag.Name, flag.Value, flag.Usage)
 		}
 	}
 }

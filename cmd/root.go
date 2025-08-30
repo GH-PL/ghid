@@ -17,6 +17,7 @@ import (
 func init() {
 	rootCmd.AddCommand(command.ListCmd)
 	rootCmd.AddCommand(command.SamplesCmd)
+	rootCmd.AddCommand(command.DecodeCmd)
 }
 
 var rootCmd = RootCmd()
@@ -55,7 +56,7 @@ func RootCmd() *cobra.Command {
 			}
 		},
 	}
-	flags.AddBoolFlags(cmd, flags.BoolFlags)
+	flags.AddBoolFlags(cmd)
 	return cmd
 }
 
