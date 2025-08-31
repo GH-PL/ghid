@@ -6,7 +6,10 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"encoding/hex"
+	"ghid/data"
+	"ghid/errHandler"
 	"ghid/flags"
+	"ghid/output"
 	"ghid/utils"
 	"strings"
 	"sync"
@@ -46,15 +49,15 @@ func decode(decodeData *DecodeData) {
 	for _, value := range utils.ParseTxt(decodeData.OpenFile) {
 		var nameUser, passUser string
 		parts := strings.SplitN(value, ":", 2)
-		if len(parts) > 2 || len(parts) == 0 {
+		if len(parts) > 2 {
 			continue
 		}
 		if len(parts) == 2 {
 			nameUser = parts[0]
-			passUser = runDecore(parts[1], decodeData.NameHash, decodeData.Dictionary)
+			passUser = runDecode(parts[1], decodeData.NameHash, decodeData.Dictionary)
 		} else {
 			nameUser = "unknown"
-			passUser = runDecore(parts[0], decodeData.NameHash, decodeData.Dictionary)
+			passUser = runDecode(parts[0], decodeData.NameHash, decodeData.Dictionary)
 		}
 
 		res := nameUser + ":" + passUser
@@ -81,17 +84,25 @@ func toHash(word string, nameHash string) string {
 }
 
 // Go
-func runDecore(passUser, nameHash, dictionary string) string {
+func runDecode(passUser, nameHash, dictionary string) string {
 	words := utils.ParseTxt(dictionary)
-	numWorkes := 16
-	wordChan := make(chan string)
-	resultChan := make(chan string, 1)
+
+	if len(words) == 0 {
+		output.PrintWarning(strings.Join([]string{errHandler.ErrDictionaryEmpty.Error(), dictionary}, ":"))
+		return passUser + " [dictionary empty]"
+	}
+
 	conText, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	wordChan := make(chan string)
+	resultChan := make(chan string, 1)
+
 	var waitGroup sync.WaitGroup
 
-	for i := 0; i < numWorkes; i++ {
+	//_______________________________________________________________
+
+	for i := 0; i < data.NUM_WORKERS; i++ {
 		waitGroup.Add(1)
 		go func() {
 			defer waitGroup.Done()
@@ -108,11 +119,8 @@ func runDecore(passUser, nameHash, dictionary string) string {
 						continue
 					}
 					if toHash(word, nameHash) == passUser {
-						select {
-						case resultChan <- word:
-							cancel()
-						default:
-						}
+						resultChan <- word
+						cancel()
 						return
 					}
 				}
@@ -126,8 +134,7 @@ func runDecore(passUser, nameHash, dictionary string) string {
 			select {
 			case <-conText.Done():
 				return
-			default:
-				wordChan <- word
+			case wordChan <- word:
 			}
 		}
 	}()

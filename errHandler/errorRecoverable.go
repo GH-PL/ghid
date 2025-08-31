@@ -9,4 +9,5 @@ var (
 	ErrNotExampleFound = errors.New("Error: no examples found")
 	ErrNotFoundName    = errors.New("Error: not found this Hash for name")
 	ErrNotReadFile     = errors.New("Error: file is not read")
+	ErrDictionaryEmpty = errors.New("Error: dictionary empty")
 )
