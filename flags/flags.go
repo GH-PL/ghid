@@ -81,7 +81,7 @@ func AddBoolFlags(cmd *cobra.Command) {
 
 // ________________String flags___________________
 var (
-	OpenFile   string
+	ReadFile   string
 	WriterFile string
 )
 
@@ -95,11 +95,11 @@ type StringFlagsStruct struct {
 
 var StringFlags = []StringFlagsStruct{
 	{
-		Name:      "open",
-		Shorthand: "o",
+		Name:      "read",
+		Shorthand: "r",
 		Value:     "",
-		Usage:     "Open file",
-		Target:    &OpenFile,
+		Usage:     "Read file",
+		Target:    &ReadFile,
 	},
 	{
 		Name:      "writer",

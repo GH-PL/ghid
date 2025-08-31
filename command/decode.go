@@ -14,7 +14,7 @@ var DecodeCmd = &cobra.Command{
 	Long:  "decode file.txt",
 	Run: func(cmd *cobra.Command, args []string) {
 		decode(&DecodeData{
-			OpenFile:   flags.OpenFile,
+			OpenFile:   flags.ReadFile,
 			WriterFile: flags.WriterFile,
 		})
 	},
