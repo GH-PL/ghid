@@ -83,6 +83,8 @@ func AddBoolFlags(cmd *cobra.Command) {
 var (
 	ReadFile   string
 	WriterFile string
+	NameHash   string
+	Dictionary string
 )
 
 type StringFlagsStruct struct {
@@ -107,6 +109,20 @@ var StringFlags = []StringFlagsStruct{
 		Value:     data.DEFAULT_DECRYPT_FILE,
 		Usage:     "Writer file",
 		Target:    &WriterFile,
+	},
+	{
+		Name:      "hash-name",
+		Shorthand: "h",
+		Value:     "md5",
+		Usage:     "Name hash",
+		Target:    &NameHash,
+	},
+	{
+		Name:      "dictionary",
+		Shorthand: "d",
+		Value:     "",
+		Usage:     "Dictionary",
+		Target:    &Dictionary,
 	},
 }
 

@@ -109,12 +109,10 @@ func CreateTxt(nameFile string, decrypt string) {
 
 	if nameFile == "" {
 		output.PrintWarning("No file path provided — creating decrypt.txt")
-		nameFile = data.DEFAULT_DECRYPT_FILE
+		nameFile = CreateDir(data.DEFAULT_DECRYPT_FILE)
 	}
 
-	filePath := CreateDir(nameFile)
-
-	file, err := os.Create(filePath)
+	file, err := os.Create(nameFile)
 
 	if err != nil {
 		errHandler.ErrorFile("create file", nameFile, err)
