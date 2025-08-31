@@ -5,6 +5,8 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"crypto/sha3"
+	"crypto/sha512"
 	"encoding/hex"
 	"ghid/data"
 	"ghid/errHandler"
@@ -78,6 +80,12 @@ func toHash(word string, nameHash string) string {
 		return hex.EncodeToString(sum[:])
 	case "sha256":
 		sum := sha256.Sum256([]byte(word))
+		return hex.EncodeToString(sum[:])
+	case "sha3":
+		sum := sha3.Sum256([]byte(word))
+		return hex.EncodeToString(sum[:])
+	case "sha-512":
+		sum := sha512.Sum512([]byte(word))
 		return hex.EncodeToString(sum[:])
 	default:
 		output.PrintError(errHandler.ErrNotTypeHash)

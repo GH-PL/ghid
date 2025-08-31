@@ -1,6 +1,6 @@
 module ghid
 
-go 1.23.4
+go 1.25.0
 
 require (
 	github.com/fatih/color v1.18.0
