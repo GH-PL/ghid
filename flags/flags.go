@@ -111,10 +111,10 @@ var StringFlags = []StringFlagsStruct{
 		Target:    &WriterFile,
 	},
 	{
-		Name:      "hash-name",
-		Shorthand: "h",
+		Name:      "hash-type",
+		Shorthand: "t",
 		Value:     "md5",
-		Usage:     "Name hash",
+		Usage:     "Type hash",
 		Target:    &NameHash,
 	},
 	{

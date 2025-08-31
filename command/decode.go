@@ -68,6 +68,7 @@ func decode(decodeData *DecodeData) {
 }
 
 func toHash(word string, nameHash string) string {
+	nameHash = strings.ToLower(nameHash)
 	switch nameHash {
 	case "md5":
 		sum := md5.Sum([]byte(word))
