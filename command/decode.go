@@ -1,6 +1,7 @@
 package command
 
 import (
+	"context"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -8,6 +9,7 @@ import (
 	"ghid/flags"
 	"ghid/utils"
 	"strings"
+	"sync"
 
 	"github.com/spf13/cobra"
 )
@@ -49,10 +51,10 @@ func decode(decodeData *DecodeData) {
 		}
 		if len(parts) == 2 {
 			nameUser = parts[0]
-			passUser = runDecode(parts[1], decodeData.NameHash, decodeData.Dictionary)
+			passUser = runDecore(parts[1], decodeData.NameHash, decodeData.Dictionary)
 		} else {
 			nameUser = "unknown"
-			passUser = runDecode(parts[0], decodeData.NameHash, decodeData.Dictionary)
+			passUser = runDecore(parts[0], decodeData.NameHash, decodeData.Dictionary)
 		}
 
 		res := nameUser + ":" + passUser
@@ -60,19 +62,6 @@ func decode(decodeData *DecodeData) {
 	}
 
 	utils.CreateTxt(decodeData.WriterFile, strings.Join(result, "\n"))
-}
-
-func runDecode(passUser, nameHash, dictionary string) string {
-	for _, word := range utils.ParseTxt(dictionary) {
-		word = strings.TrimSpace(word)
-		if word == "" {
-			continue
-		}
-		if toHash(word, nameHash) == passUser {
-			return word
-		}
-	}
-	return passUser + " [not found]"
 }
 
 func toHash(word string, nameHash string) string {
@@ -89,4 +78,67 @@ func toHash(word string, nameHash string) string {
 	default:
 		return ""
 	}
+}
+
+// Go
+func runDecore(passUser, nameHash, dictionary string) string {
+	words := utils.ParseTxt(dictionary)
+	numWorkes := 16
+	wordChan := make(chan string)
+	resultChan := make(chan string, 1)
+	conText, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var waitGroup sync.WaitGroup
+
+	for i := 0; i < numWorkes; i++ {
+		waitGroup.Add(1)
+		go func() {
+			defer waitGroup.Done()
+			for {
+				select {
+				case <-conText.Done():
+					return
+				case word, ok := <-wordChan:
+					if !ok {
+						return
+					}
+					word = strings.TrimSpace(word)
+					if word == "" {
+						continue
+					}
+					if toHash(word, nameHash) == passUser {
+						select {
+						case resultChan <- word:
+							cancel()
+						default:
+						}
+						return
+					}
+				}
+			}
+		}()
+	}
+
+	go func() {
+		defer close(wordChan)
+		for _, word := range words {
+			select {
+			case <-conText.Done():
+				return
+			default:
+				wordChan <- word
+			}
+		}
+	}()
+
+	go func() {
+		waitGroup.Wait()
+		close(resultChan)
+	}()
+
+	if result, ok := <-resultChan; ok {
+		return result
+	}
+	return passUser + " [not found]"
 }
