@@ -10,4 +10,5 @@ var (
 	ErrNotFoundName    = errors.New("Error: not found this Hash for name")
 	ErrNotReadFile     = errors.New("Error: file is not read")
 	ErrDictionaryEmpty = errors.New("Error: dictionary empty")
+	ErrNotTypeHash     = errors.New("Error: not type hash in database")
 )

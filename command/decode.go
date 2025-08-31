@@ -80,6 +80,7 @@ func toHash(word string, nameHash string) string {
 		sum := sha256.Sum256([]byte(word))
 		return hex.EncodeToString(sum[:])
 	default:
+		output.PrintError(errHandler.ErrNotTypeHash)
 		return ""
 	}
 }
