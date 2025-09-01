@@ -9,6 +9,4 @@ const (
 )
 
 // Int
-const (
-	NUM_WORKERS int = 16
-)
+const ()
