@@ -1,7 +1,7 @@
 package library
 
 import (
-	"io"
+	"hash"
 	"strconv"
 )
 
@@ -104,11 +104,11 @@ func (hashId Hash) String() string {
 }
 
 // from uint id make func
-var hashes = make([]func() Hasher, maxHash)
+var hashes = make([]func() hash.Hash, maxHash)
 
 // return func for input uint id.
 // ______________New_______________________
-func (hashId Hash) New() Hasher {
+func (hashId Hash) New() hash.Hash {
 	if hashId > 0 && hashId < maxHash {
 		arrayFunc := hashes[hashId]
 		if arrayFunc != nil {
@@ -132,18 +132,9 @@ func (hashId Hash) Available() bool {
 }
 
 // ________________Init_________________________
-func RegisterHash(hashId Hash, uintFunc func() Hasher) {
+func RegisterHash(hashId Hash, uintFunc func() hash.Hash) {
 	if hashId >= maxHash {
 		panic("crypto: RegisterHash of unknown hash function")
 	}
 	hashes[hashId] = uintFunc
-}
-
-type Hasher interface {
-	io.Writer
-
-	Sum(b []byte) []byte
-	Reset()
-	Size() int
-	BlockSize() int
 }

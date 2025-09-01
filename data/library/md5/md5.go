@@ -1,6 +1,9 @@
 package md5
 
-import "ghid/data/library"
+import (
+	"ghid/data/library"
+	"hash"
+)
 
 const (
 	Size        = 16
@@ -34,7 +37,7 @@ func (d *digest) Sum(b []byte) []byte {
 	return []byte{}
 }
 
-func New() library.Hasher {
+func New() hash.Hash {
 	d := new(digest)
 	d.Reset()
 	return d
