@@ -8,6 +8,8 @@ import (
 	"ghid/command/list"
 	"ghid/command/samples"
 	"ghid/command/version"
+	"ghid/flags"
+	"ghid/output"
 
 	"github.com/spf13/cobra"
 )
@@ -32,6 +34,11 @@ Examples:
   ghid samples md5                               # Show sample hashes for MD5
   ghid version                                   # Display app version`,
 	Args: cobra.ArbitraryArgs,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if flags.NoColorFlag {
+			output.DisableColorOutput()
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
