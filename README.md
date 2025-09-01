@@ -10,10 +10,11 @@
 
 | Command | Description |
 |--------|-------------|
-| `ghid <hash>` | Identify the most probable hash type. |
+| `ghid detect` | Identify the most probable hash type. |
 | `ghid list` | Show the full list of supported hash types. |
 | `ghid samples [hash name]` | Show sample hashes for the given hash type. |
 | `ghid decode` | Try to decode hashes using a dictionary attack. |
+
 
 ---
 

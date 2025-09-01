@@ -15,8 +15,8 @@ import (
 func Commands() []*cobra.Command {
 	var detectCmd = &cobra.Command{
 		Use:   "detect [flags] <hash>",
-		Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
-		Long:  "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
+		Short: "Identify the most probable hash type",
+		Long:  "Identify the most probable hash type",
 		Run: func(cmd *cobra.Command, args []string) {
 			matchHash := matchHashTypes(args)
 			if !matchHash {
