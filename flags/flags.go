@@ -8,7 +8,6 @@ import (
 
 // _________Bool flags___________
 var (
-	VersionFlag bool
 	ShortFlag   bool
 	NoColorFlag bool
 	Hashcat     bool
@@ -25,13 +24,6 @@ type BoolFlagsStruct struct {
 }
 
 var BoolFlags = []BoolFlagsStruct{
-	{
-		Name:      "version",
-		Shorthand: "v",
-		Value:     false,
-		Usage:     "Show version",
-		Target:    &VersionFlag,
-	},
 	{
 		Name:      "short",
 		Shorthand: "s",

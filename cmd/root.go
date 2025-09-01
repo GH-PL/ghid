@@ -17,7 +17,8 @@ import (
 func init() {
 	rootCmd.AddCommand(command.ListCmd)
 	rootCmd.AddCommand(command.SamplesCmd)
-	rootCmd.AddCommand(command.DecodeCmd)
+	rootCmd.AddCommand(command.VersionCmd)
+	//rootCmd.AddCommand(command.DecodeCmd)
 }
 
 var rootCmd = RootCmd()

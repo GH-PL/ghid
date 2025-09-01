@@ -19,7 +19,7 @@ type DecodeData struct {
 	Dictionary string
 }
 
-func decode(decodeData *DecodeData) {
+func Decode(decodeData *DecodeData) {
 	var (
 		out  strings.Builder
 		dict []string = utils.ParseTxt(decodeData.Dictionary)
