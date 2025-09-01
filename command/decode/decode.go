@@ -20,8 +20,7 @@ func Commands() []*cobra.Command {
 			})
 		},
 	}
-	flags.AddBoolFlags(decodeCmd)
-	flags.AddStringFlags(decodeCmd)
+	flags.AddCommandFlags(decodeCmd, "decode")
 
 	return []*cobra.Command{decodeCmd}
 }

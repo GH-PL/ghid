@@ -20,7 +20,7 @@ func Commands() []*cobra.Command {
 		},
 	}
 
-	flags.AddBoolFlags(listCmd)
+	flags.AddCommandFlags(listCmd, "list")
 
 	return []*cobra.Command{listCmd}
 }

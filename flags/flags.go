@@ -127,3 +127,36 @@ func AddStringFlags(cmd *cobra.Command) {
 		}
 	}
 }
+
+var FlagsPerCommand = map[string][]string{
+	"decode":  {"short", "read", "writer", "hash-type", "dictionary"},
+	"detect":  {"short", "extended", "hashcat-only", "john-only", "no-color"}, // "read", "writer"
+	"list":    {"no-color"},                                                   // "hashcat-only", "john-only"
+	"samples": {"no-color"},                                                   // "hashcat-only", "john-only"
+	"version": {"no-color"},
+}
+
+func AddCommandFlags(cmd *cobra.Command, commandName string) {
+	// Add Bool-flags.
+	for _, flagName := range FlagsPerCommand[commandName] {
+		for _, flag := range BoolFlags {
+			if flag.Name == flagName {
+				if flag.Shorthand != "" {
+					cmd.Flags().BoolVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
+				} else {
+					cmd.Flags().BoolVar(flag.Target, flag.Name, flag.Value, flag.Usage)
+				}
+			}
+		}
+		// Add String-flags.
+		for _, flag := range StringFlags {
+			if flag.Name == flagName {
+				if flag.Shorthand != "" {
+					cmd.Flags().StringVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
+				} else {
+					cmd.Flags().StringVar(flag.Target, flag.Name, flag.Value, flag.Usage)
+				}
+			}
+		}
+	}
+}
