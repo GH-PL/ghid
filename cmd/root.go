@@ -1,15 +1,14 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"ghid/command/decode"
 	"ghid/errHandler"
 	"ghid/flags"
 	"ghid/output"
 
 	"ghid/command"
-	"ghid/data"
 
 	"github.com/spf13/cobra"
 )
@@ -18,7 +17,7 @@ func init() {
 	rootCmd.AddCommand(command.ListCmd)
 	rootCmd.AddCommand(command.SamplesCmd)
 	rootCmd.AddCommand(command.VersionCmd)
-	//rootCmd.AddCommand(command.DecodeCmd)
+	rootCmd.AddCommand(decode.Commands()...)
 }
 
 var rootCmd = RootCmd()
@@ -43,12 +42,6 @@ func RootCmd() *cobra.Command {
 				}
 			}
 
-		},
-		PreRun: func(cmd *cobra.Command, args []string) {
-			if flags.VersionFlag {
-				fmt.Println(data.VERSION)
-				os.Exit(0)
-			}
 		},
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 
