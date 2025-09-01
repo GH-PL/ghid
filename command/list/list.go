@@ -1,4 +1,4 @@
-package command
+package list
 
 import (
 	"ghid/data"
@@ -10,17 +10,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var ListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "Show all Hash name",
-	Long:  "Show all Hash name",
-	Run: func(cmd *cobra.Command, args []string) {
-		showList()
-	},
-}
+func Commands() []*cobra.Command {
+	var listCmd = &cobra.Command{
+		Use:   "list",
+		Short: "Show all Hash name",
+		Long:  "Show all Hash name",
+		Run: func(cmd *cobra.Command, args []string) {
+			showList()
+		},
+	}
 
-func init() {
-	flags.AddBoolFlags(ListCmd)
+	flags.AddBoolFlags(listCmd)
+
+	return []*cobra.Command{listCmd}
 }
 
 func showList() {

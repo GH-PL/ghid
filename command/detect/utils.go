@@ -1,51 +1,13 @@
-package cmd
+package detect
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
-	"strings"
-
 	"ghid/data"
-	"ghid/flags"
 	"ghid/output"
 	"ghid/utils"
+	"strconv"
+	"strings"
 )
-
-func matchHashTypes(args []string) bool {
-	found := false
-	hashes := utils.ParseJson(data.WAY_DATA_JSON)
-
-	for _, hashValue := range hashes {
-		for _, valueArgs := range args {
-			match, _ := regexp.MatchString(hashValue.Regex, valueArgs)
-
-			if !match {
-				continue
-			}
-			found = true
-			for _, modes := range hashValue.Modes {
-
-				if !flags.Extended && !isSimpleHash(modes.Name) {
-					continue
-				}
-				switch {
-				case flags.ShortFlag:
-					printModeField("Name", &modes.Name)
-				case flags.Hashcat:
-					printModeField("Hashcat", uintToStr(modes.Hashcat))
-				case flags.John:
-					printModeField("John", modes.John)
-
-				default:
-					printMode(modes)
-				}
-
-			}
-		}
-	}
-	return found
-}
 
 func printMode(modes data.Modes) {
 	output.PrintGreenText(fmt.Sprintf("- %s\n", modes.Name))

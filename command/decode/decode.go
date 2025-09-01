@@ -7,7 +7,7 @@ import (
 )
 
 func Commands() []*cobra.Command {
-	var DecodeCmd = &cobra.Command{
+	var decodeCmd = &cobra.Command{
 		Use:   "decode",
 		Short: "decode file.txt",
 		Long:  "decode file.txt",
@@ -20,8 +20,8 @@ func Commands() []*cobra.Command {
 			})
 		},
 	}
-	flags.AddBoolFlags(DecodeCmd)
-	flags.AddStringFlags(DecodeCmd)
+	flags.AddBoolFlags(decodeCmd)
+	flags.AddStringFlags(decodeCmd)
 
-	return []*cobra.Command{DecodeCmd}
+	return []*cobra.Command{decodeCmd}
 }

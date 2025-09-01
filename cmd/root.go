@@ -4,54 +4,37 @@ import (
 	"os"
 
 	"ghid/command/decode"
-	"ghid/errHandler"
-	"ghid/flags"
-	"ghid/output"
-
-	"ghid/command"
+	"ghid/command/detect"
+	"ghid/command/list"
+	"ghid/command/samples"
+	"ghid/command/version"
 
 	"github.com/spf13/cobra"
 )
 
 func init() {
-	rootCmd.AddCommand(command.ListCmd)
-	rootCmd.AddCommand(command.SamplesCmd)
-	rootCmd.AddCommand(command.VersionCmd)
+	rootCmd.AddCommand(samples.Commands()...)
+	rootCmd.AddCommand(list.Commands()...)
+	rootCmd.AddCommand(version.Commands()...)
 	rootCmd.AddCommand(decode.Commands()...)
+	rootCmd.AddCommand(detect.Commands()...)
 }
 
-var rootCmd = RootCmd()
+var rootCmd = &cobra.Command{
+	Use:   "ghid",
+	Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
+	Long: `Ghid is a CLI tool for identifying hash types and working with hash data.
 
-func RootCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "ghid [command] [flags] <hash>",
-		Short: "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
-		Long:  "Ghid — Golang Hash Identifier — is a sample Go application that serves as an analog to the Haiti, HashId program and others.",
-		Args:  cobra.ArbitraryArgs,
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) < 1 {
-				cmd.Help()
-				return
-			}
-			matchHash := matchHashTypes(args)
-			if !matchHash {
-				output.PrintError(errHandler.ErrNotFoundHash)
-			} else {
-				if !flags.Extended {
-					output.PrintWarning("You need extended mode")
-				}
-			}
-
-		},
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-
-			if flags.NoColorFlag {
-				output.DisableColorOutput()
-			}
-		},
-	}
-	flags.AddBoolFlags(cmd)
-	return cmd
+Examples:
+  ghid detect 5f4dcc3b5aa765d61d8327deb882cf99   # Detect hash type
+  ghid decode -f hashes.txt -o output.txt        # Decode hash file
+  ghid list                                      # List all supported hash types
+  ghid samples md5                               # Show sample hashes for MD5
+  ghid version                                   # Display app version`,
+	Args: cobra.ArbitraryArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
+	},
 }
 
 func Execute() {
