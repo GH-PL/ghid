@@ -1,7 +1,7 @@
-package main
+package library
 
 import (
-	"hash"
+	"io"
 	"strconv"
 )
 
@@ -104,15 +104,46 @@ func (hashId Hash) String() string {
 }
 
 // from uint id make func
-var hashes = make([]func() hash.Hash, maxHash)
+var hashes = make([]func() Hasher, maxHash)
 
 // return func for input uint id.
-func (hashId Hash) New() hash.Hash {
+// ______________New_______________________
+func (hashId Hash) New() Hasher {
 	if hashId > 0 && hashId < maxHash {
-		f := hashes[hashId]
-		if f != nil {
-			return f()
+		arrayFunc := hashes[hashId]
+		if arrayFunc != nil {
+			return arrayFunc()
 		}
 	}
 	panic("crypto: requested hash function #" + strconv.Itoa(int(hashId)) + " is unavailable")
+}
+
+// ______Size__________
+func (hashId Hash) Size() int {
+	if hashId > 0 && hashId < maxHash {
+		return int(digestSizes[hashId])
+	}
+	panic("Library: Size of unknown hash function")
+}
+
+// __________Available_____________
+func (hashId Hash) Available() bool {
+	return hashId < maxHash && hashes[hashId] != nil
+}
+
+// ________________Init_________________________
+func RegisterHash(hashId Hash, uintFunc func() Hasher) {
+	if hashId >= maxHash {
+		panic("crypto: RegisterHash of unknown hash function")
+	}
+	hashes[hashId] = uintFunc
+}
+
+type Hasher interface {
+	io.Writer
+
+	Sum(b []byte) []byte
+	Reset()
+	Size() int
+	BlockSize() int
 }
