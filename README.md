@@ -14,6 +14,7 @@
 | `ghid list` | Show the full list of supported hash types. |
 | `ghid samples [hash name]` | Show sample hashes for the given hash type. |
 | `ghid decode` | Try to decode hashes using a dictionary attack. |
+| `ghid version` | Show version App. |
 
 
 ---
@@ -26,7 +27,6 @@
 | `-c`, `--hashcat-only` | Show only Hashcat references. |
 | `-j`, `--john-only` | Show only John the Ripper references. |
 | `-e`, `--extended` | List all possible hash algorithms, including salted ones. |
-| `-v`, `--version` | Show version information. |
 | `-n`, `--no-color` | Disable color output. |
 
 ---
