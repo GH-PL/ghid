@@ -61,16 +61,6 @@ var BoolFlags = []BoolFlagsStruct{
 	},
 }
 
-func AddBoolFlags(cmd *cobra.Command) {
-	for _, flag := range BoolFlags {
-		if flag.Shorthand != "" {
-			cmd.Flags().BoolVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
-		} else {
-			cmd.Flags().BoolVar(flag.Target, flag.Name, flag.Value, flag.Usage)
-		}
-	}
-}
-
 // ________________String flags___________________
 var (
 	ReadFile   string
@@ -118,16 +108,7 @@ var StringFlags = []StringFlagsStruct{
 	},
 }
 
-func AddStringFlags(cmd *cobra.Command) {
-	for _, flag := range StringFlags {
-		if flag.Shorthand != "" {
-			cmd.Flags().StringVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
-		} else {
-			cmd.Flags().StringVar(flag.Target, flag.Name, flag.Value, flag.Usage)
-		}
-	}
-}
-
+// _______________Map [command] [Flags]__________________________
 var FlagsPerCommand = map[string][]string{
 	"decode":  {"short", "read", "writer", "hash-type", "dictionary"},
 	"detect":  {"short", "extended", "hashcat-only", "john-only", "no-color"}, // "read", "writer"
@@ -136,6 +117,7 @@ var FlagsPerCommand = map[string][]string{
 	"version": {"no-color"},
 }
 
+// ____________________Func Add Flags to Command______________
 func AddCommandFlags(cmd *cobra.Command, commandName string) {
 	// Add Bool-flags.
 	for _, flagName := range FlagsPerCommand[commandName] {
