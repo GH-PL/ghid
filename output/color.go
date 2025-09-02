@@ -71,9 +71,9 @@ func getColor(attribute []color.Attribute) *color.Color {
 	if cache, ok := colorCache[key]; ok {
 		return cache
 	}
-	cashe := color.New(attribute...)
-	colorCache[key] = cashe
-	return cashe
+	cache := color.New(attribute...)
+	colorCache[key] = cache
+	return cache
 }
 
 func makeKey(attribute []color.Attribute) string {
@@ -84,9 +84,13 @@ func makeKey(attribute []color.Attribute) string {
 		return attr[i] < attr[j]
 	})
 
-	var parts []string
-	for _, a := range attr {
-		parts = append(parts, strconv.Itoa(int(a)))
+	var key strings.Builder
+	key.Grow(len(attr)*4 - 1)
+	for i, a := range attr {
+		if i > 0 {
+			key.WriteByte('-')
+		}
+		key.WriteString(strconv.Itoa(int(a)))
 	}
-	return strings.Join(parts, "-")
+	return key.String()
 }
