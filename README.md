@@ -46,10 +46,10 @@
 
 ```bash
 # Identify the most likely hash type
-ghid 5f4dcc3b5aa765d61d8327deb882cf99
+ghid detect 5f4dcc3b5aa765d61d8327deb882cf99
 
 # Get only short name references
-ghid -s 5f4dcc3b5aa765d61d8327deb882cf99
+ghid detect -s 5f4dcc3b5aa765d61d8327deb882cf99
 
 # List all supported hash types
 ghid list
