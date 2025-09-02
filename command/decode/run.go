@@ -3,6 +3,7 @@ package decode
 import (
 	"context"
 	"fmt"
+	"ghid/data"
 	"ghid/errHandler"
 	"ghid/output"
 	"ghid/utils"
@@ -87,7 +88,7 @@ func runDecode(passHash, nameHash string, dictionary []string) string {
 
 	//_______________________________________________________________
 
-	var numWorker = runtime.NumCPU() / 2
+	var numWorker = runtime.NumCPU() / data.NUM_WORKER
 	if numWorker < 1 {
 		numWorker = 1
 	}

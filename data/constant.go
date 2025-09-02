@@ -9,7 +9,9 @@ const (
 )
 
 // Int
-const ()
+const (
+	NUM_WORKER int = 2 // Defines the number of worker threads. Actual core usage: total cores / NUM_WORKER
+)
 
 type Command uint
 
