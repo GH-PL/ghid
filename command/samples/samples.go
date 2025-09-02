@@ -44,18 +44,20 @@ func samples(str string) {
 
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-			if !strings.EqualFold(str, mode.Name) {
-				output.PrintError(errHandler.ErrNotFoundName)
+			if strings.EqualFold(str, mode.Name) {
+				if len(mode.Samples) == 0 {
+					output.PrintError(errHandler.ErrNotExampleFound)
+					return
+				}
+
+				var out strings.Builder
+				for _, samplesValue := range mode.Samples {
+					out.WriteString(samplesValue + "\n")
+				}
+				output.PrintBlueText(out.String())
 				return
-			}
-			if len(mode.Samples) == 0 {
-				output.PrintError(errHandler.ErrNotExampleFound)
-				return
-			}
-			for _, samplesValue := range mode.Samples {
-				output.PrintBlueText(samplesValue)
 			}
 		}
 	}
-
+	output.PrintError(errHandler.ErrNotFoundName)
 }
