@@ -8,6 +8,7 @@ import (
 	"ghid/data"
 	"ghid/errHandler"
 	"ghid/flags"
+
 	"ghid/output"
 	"os"
 	"path/filepath"

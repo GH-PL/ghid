@@ -108,9 +108,33 @@ var StringFlags = []StringFlagsStruct{
 	},
 }
 
+// _______Int flags___________
+// Int
+var (
+	NumWorker int
+)
+
+type IntFlagsStruct struct {
+	Name      string
+	Shorthand string
+	Value     int
+	Usage     string
+	Target    *int
+}
+
+var IntFlags = []IntFlagsStruct{
+	{
+		Name:      "limit",
+		Shorthand: "l",
+		Value:     data.NUM_WORKER,
+		Usage:     "Number Worker, default: Core/2",
+		Target:    &NumWorker,
+	},
+}
+
 // _______________Map [command] [Flags]__________________________
 var FlagsPerCommand = map[data.Command][]string{
-	data.CMD_DECODE:  {"short", "read", "writer", "hash-type", "dictionary"},
+	data.CMD_DECODE:  {"short", "read", "writer", "hash-type", "dictionary", "limit"},
 	data.CMD_DETECT:  {"short", "extended", "hashcat-only", "john-only", "no-color"}, // "read", "writer"
 	data.CMD_LIST:    {"no-color"},                                                   // "hashcat-only", "john-only"
 	data.CMD_SAMPLES: {"no-color"},                                                   // "hashcat-only", "john-only"
@@ -137,6 +161,16 @@ func AddCommandFlags(cmd *cobra.Command, commandName data.Command) {
 					cmd.Flags().StringVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
 				} else {
 					cmd.Flags().StringVar(flag.Target, flag.Name, flag.Value, flag.Usage)
+				}
+			}
+		}
+		// Add Int-flags.
+		for _, flag := range IntFlags {
+			if flag.Name == flagName {
+				if flag.Shorthand != "" {
+					cmd.Flags().IntVarP(flag.Target, flag.Name, flag.Shorthand, flag.Value, flag.Usage)
+				} else {
+					cmd.Flags().IntVar(flag.Target, flag.Name, flag.Value, flag.Usage)
 				}
 			}
 		}

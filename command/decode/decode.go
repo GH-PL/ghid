@@ -18,6 +18,7 @@ func Commands() []*cobra.Command {
 				WriterFile: flags.WriterFile,
 				NameHash:   flags.NameHash,
 				Dictionary: flags.Dictionary,
+				Core:       flags.NumWorker,
 			})
 		},
 	}

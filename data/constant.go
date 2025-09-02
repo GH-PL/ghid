@@ -8,11 +8,6 @@ const (
 	DEFAULT_DECRYPT_FILE string = "decrypt.txt"
 )
 
-// Int
-const (
-	NUM_WORKER int = 2 // Defines the number of worker threads. Actual core usage: total cores / NUM_WORKER
-)
-
 type Command uint
 
 const (
@@ -21,4 +16,8 @@ const (
 	CMD_LIST
 	CMD_SAMPLES
 	CMD_VERSION
+)
+
+const (
+	NUM_WORKER int = 2 // Defines the number of worker threads. Actual core usage: total cores / NUM_WORKER
 )

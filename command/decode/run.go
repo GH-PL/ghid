@@ -18,6 +18,7 @@ type DecodeData struct {
 	WriterFile string
 	NameHash   string
 	Dictionary string
+	Core       int
 }
 
 func Decode(decodeData *DecodeData) {
@@ -37,7 +38,7 @@ func Decode(decodeData *DecodeData) {
 			passHash = parts[1]
 		}
 
-		passUser = runDecode(passHash, decodeData.NameHash, dict)
+		passUser = runDecode(passHash, decodeData.NameHash, dict, decodeData.Core)
 
 		out.WriteString(nameUser)
 		out.WriteString(":")
@@ -48,7 +49,7 @@ func Decode(decodeData *DecodeData) {
 	utils.CreateTxt(decodeData.WriterFile, out.String())
 }
 
-func runDecode(passHash, nameHash string, dictionary []string) string {
+func runDecode(passHash, nameHash string, dictionary []string, core int) string {
 
 	var out strings.Builder
 
@@ -89,8 +90,14 @@ func runDecode(passHash, nameHash string, dictionary []string) string {
 	//_______________________________________________________________
 
 	var numWorker = runtime.NumCPU() / data.NUM_WORKER
+	if core != 2 {
+		numWorker = core
+	}
 	if numWorker < 1 {
 		numWorker = 1
+	}
+	if numWorker > runtime.NumCPU() {
+		numWorker = runtime.NumCPU()
 	}
 
 	cleanDict := make([]string, 0, len(dictionary))
