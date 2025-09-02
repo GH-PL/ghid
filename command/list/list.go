@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"ghid/data"
 	"ghid/flags"
 	"ghid/output"
@@ -37,7 +36,7 @@ func showList() {
 	var out strings.Builder
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-			fmt.Fprintf(&out, "%s\n", mode.Name)
+			out.WriteString(mode.Name + "\n")
 		}
 	}
 	output.PrintBlueText(out.String())

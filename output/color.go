@@ -2,6 +2,9 @@ package output
 
 import (
 	"fmt"
+	"sort"
+	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 )
@@ -24,7 +27,7 @@ func PrintColorText(txt *Text) {
 	attributes := []color.Attribute{txt.ColorAttribute}
 	attributes = append(attributes, txt.Style...)
 
-	outLine := color.New(attributes...)
+	outLine := getColor(attributes)
 	outLine.Println(txt.Text)
 }
 
@@ -59,4 +62,31 @@ func PrintGreenText(msg string) {
 		Style:          []color.Attribute{color.Bold},
 	})
 
+}
+
+var colorCache = make(map[string]*color.Color)
+
+func getColor(attribute []color.Attribute) *color.Color {
+	key := makeKey(attribute)
+	if cache, ok := colorCache[key]; ok {
+		return cache
+	}
+	cashe := color.New(attribute...)
+	colorCache[key] = cashe
+	return cashe
+}
+
+func makeKey(attribute []color.Attribute) string {
+	attr := make([]color.Attribute, len(attribute))
+	copy(attr, attribute)
+
+	sort.Slice(attr, func(i, j int) bool {
+		return attr[i] < attr[j]
+	})
+
+	var parts []string
+	for _, a := range attr {
+		parts = append(parts, strconv.Itoa(int(a)))
+	}
+	return strings.Join(parts, "-")
 }
