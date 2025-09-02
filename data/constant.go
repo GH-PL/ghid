@@ -11,16 +11,6 @@ const (
 // Int
 const ()
 
-/*
-// _________Name command_________
-const (
-	CMD_DETECT  string = "detect"
-	CMD_DECODE  string = "decode"
-	CMD_LIST    string = "list"
-	CMD_SAMPLES string = "samples"
-	CMD_VERSION string = "version"
-)
-*/
 type Command uint
 
 const (
