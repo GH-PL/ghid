@@ -14,6 +14,24 @@ import (
 	"strings"
 )
 
+type Hash struct {
+	Regex string  `json:"regex"`
+	Modes []Modes `json:"modes"`
+}
+type Modes struct {
+	John    *string  `json:"john"`
+	Hashcat *uint    `json:"hashcat"`
+	Name    string   `json:"name"`
+	Samples []string `json:"samples"`
+}
+
+type ModeTable struct {
+	Names    []string
+	John     []string
+	Hashcats []string
+	Samples  [][]string
+}
+
 // Open a file given its file path
 func openFile(filePath string) (*os.File, error) {
 	return os.OpenFile(filePath, os.O_RDONLY, 0)
@@ -34,8 +52,8 @@ func loadJson(filePath string, v interface{}) {
 }
 
 // Parse the JSON file and return a slice of data.Hash
-func ParseJson(filePath string) []data.Hash {
-	var hashes []data.Hash
+func ParseJson(filePath string) []Hash {
+	var hashes []Hash
 	loadJson(filePath, &hashes)
 	return hashes
 }
@@ -142,4 +160,30 @@ func CreateDir(namefile string) string {
 		errHandler.ErrorFile("create app dir ", "homeDir/.ghid", err)
 	}
 	return filePath
+}
+
+func Convert(modes []Modes) ModeTable {
+
+	var table ModeTable = ModeTable{
+		Names:    make([]string, 0, len(modes)),
+		John:     make([]string, 0, len(modes)),
+		Hashcats: make([]string, 0, len(modes)),
+		Samples:  make([][]string, 0, len(modes)),
+	}
+
+	for _, mode := range modes {
+		table.Names = append(table.Names, mode.Name)
+		table.Samples = append(table.Samples, mode.Samples)
+		if mode.John != nil {
+			table.John = append(table.John, *mode.John)
+		} else {
+			table.John = append(table.John, "")
+		}
+		if mode.Hashcat != nil {
+			table.Hashcats = append(table.Hashcats, fmt.Sprintf("%d", *mode.Hashcat))
+		} else {
+			table.Hashcats = append(table.Hashcats, "")
+		}
+	}
+	return table
 }

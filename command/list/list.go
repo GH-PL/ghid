@@ -30,8 +30,10 @@ func showList() {
 
 	var out strings.Builder
 	for _, hashValue := range hash {
-		for _, mode := range hashValue.Modes {
-			out.WriteString(mode.Name + "\n")
+		var modeTable utils.ModeTable = utils.Convert(hashValue.Modes)
+
+		for _, name := range modeTable.Names {
+			out.WriteString(name + "\n")
 		}
 	}
 	output.PrintBlueText(out.String())

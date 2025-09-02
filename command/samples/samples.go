@@ -2,6 +2,7 @@ package samples
 
 import (
 	"strings"
+	"sync"
 
 	"ghid/data"
 	"ghid/errHandler"
@@ -25,6 +26,7 @@ func Commands() []*cobra.Command {
 				output.PrintError(errHandler.ErrEmptyArgument)
 				cmd.Usage()
 			} else {
+				loadSamplesIndex()
 				samples(args[0])
 			}
 		},
@@ -35,25 +37,40 @@ func Commands() []*cobra.Command {
 	return []*cobra.Command{samplesCmd}
 }
 
-func samples(str string) {
-	hash := utils.ParseJson(data.WAY_DATA_JSON)
+var (
+	cacheOne     sync.Once
+	samplesIndex map[string][]string
+)
 
-	for _, hashValue := range hash {
-		for _, mode := range hashValue.Modes {
-			if strings.EqualFold(str, mode.Name) {
-				if len(mode.Samples) == 0 {
-					output.PrintError(errHandler.ErrNotExampleFound)
-					return
-				}
-
-				var out strings.Builder
-				for _, sample := range mode.Samples {
-					out.WriteString(sample + "\n")
-				}
-				output.PrintBlueText(out.String())
-				return
+func loadSamplesIndex() {
+	cacheOne.Do(func() {
+		hash := utils.ParseJson(data.WAY_DATA_JSON)
+		samplesIndex = make(map[string][]string)
+		for _, hashValue := range hash {
+			for _, mode := range hashValue.Modes {
+				samplesIndex[strings.ToUpper(mode.Name)] = mode.Samples
 			}
 		}
+	})
+}
+
+func samples(str string) {
+
+	key := strings.ToUpper(str)
+	sample, ok := samplesIndex[key]
+
+	if !ok {
+		output.PrintError(errHandler.ErrNotFoundName)
+		return
 	}
-	output.PrintError(errHandler.ErrNotFoundName)
+	if len(sample) == 0 {
+		output.PrintError(errHandler.ErrNotExampleFound)
+		return
+	}
+
+	var out strings.Builder
+	for _, sampl := range sample {
+		out.WriteString(sampl + "\n")
+	}
+	output.PrintBlueText(out.String())
 }

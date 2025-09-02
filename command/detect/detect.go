@@ -2,6 +2,7 @@ package detect
 
 import (
 	"regexp"
+	"sync"
 
 	"ghid/data"
 	"ghid/errHandler"
@@ -32,37 +33,58 @@ func Commands() []*cobra.Command {
 	return []*cobra.Command{detectCmd}
 }
 
+var (
+	hashesOnce sync.Once
+	hashes     []utils.Hash
+)
+
+func loadJsonHash() []utils.Hash {
+	hashesOnce.Do(func() {
+		hashes = utils.ParseJson(data.WAY_DATA_JSON)
+	})
+	return hashes
+}
+
 func matchHashTypes(args []string) bool {
 	found := false
-	hashes := utils.ParseJson(data.WAY_DATA_JSON)
-
-	for _, hashValue := range hashes {
-		for _, valueArgs := range args {
-			match, _ := regexp.MatchString(hashValue.Regex, valueArgs)
-
-			if !match {
-				continue
-			}
+	loadJsonHash()
+	for _, arg := range args {
+		if matched := search(arg, hashes); matched {
 			found = true
-			for _, modes := range hashValue.Modes {
-
-				if !flags.Extended && !isSimpleHash(modes.Name) {
-					continue
-				}
-				switch {
-				case flags.ShortFlag:
-					printModeField("Name", &modes.Name)
-				case flags.Hashcat:
-					printModeField("Hashcat", uintToStr(modes.Hashcat))
-				case flags.John:
-					printModeField("John", modes.John)
-
-				default:
-					printMode(modes)
-				}
-
-			}
 		}
 	}
 	return found
+}
+
+func search(arg string, hashes []utils.Hash) bool {
+	for _, hashValue := range hashes {
+		if match, _ := regexp.MatchString(hashValue.Regex, arg); !match {
+			continue
+		}
+		for _, mode := range hashValue.Modes {
+			if !flags.Extended && !isSimpleHash(mode.Name) {
+				continue
+			}
+			printModeByFlags(mode)
+		}
+		return true
+
+	}
+	return false
+}
+
+func printModeByFlags(mode utils.Modes) {
+	if flags.Hashcat {
+		printIfExists("Hashcat", uintToStr(mode.Hashcat))
+		return
+	}
+	if flags.John {
+		printIfExists("John", toStr(mode.John))
+		return
+	}
+	if flags.ShortFlag {
+		printIfExists("Name", mode.Name)
+		return
+	}
+	printMode(mode)
 }

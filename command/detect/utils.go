@@ -7,9 +7,10 @@ import (
 	"ghid/utils"
 	"strconv"
 	"strings"
+	"sync"
 )
 
-func printMode(modes data.Modes) {
+func printMode(modes utils.Modes) {
 	var sb strings.Builder
 
 	fmt.Fprintf(&sb, "- %s\n", modes.Name)
@@ -24,23 +25,38 @@ func printMode(modes data.Modes) {
 	output.PrintGreenText(sb.String())
 }
 
+var (
+	once         sync.Once
+	simpleHashes map[string]struct{}
+)
+
 func isSimpleHash(name string) bool {
-	_, ok := utils.ParseCsv(data.WAY_POPULAR_HASH_CSV)[strings.ToLower(name)]
+
+	once.Do(func() {
+		simpleHashes = utils.ParseCsv(data.WAY_POPULAR_HASH_CSV)
+	})
+	_, ok := simpleHashes[strings.ToLower(name)]
 	return ok
 }
 
-func printModeField(label string, name *string) {
-	if name == nil {
+func printIfExists(label string, name string) {
+	if name == "" {
 		output.PrintWarning(fmt.Sprintf("  %s: not available\n", label))
 		return
 	}
-	output.PrintGreenText(fmt.Sprintf("  %s: %s\n", label, *name))
+	output.PrintGreenText(fmt.Sprintf("  %s: %s\n", label, name))
 }
 
-func uintToStr(uInt *uint) *string {
+func uintToStr(uInt *uint) string {
 	if uInt == nil {
-		return nil
+		return ""
 	}
-	str := strconv.FormatUint(uint64(*uInt), 10)
-	return &str
+	return strconv.FormatUint(uint64(*uInt), 10)
+}
+
+func toStr(str *string) string {
+	if str == nil {
+		return ""
+	}
+	return *str
 }
