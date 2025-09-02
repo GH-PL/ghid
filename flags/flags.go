@@ -109,16 +109,16 @@ var StringFlags = []StringFlagsStruct{
 }
 
 // _______________Map [command] [Flags]__________________________
-var FlagsPerCommand = map[string][]string{
-	"decode":  {"short", "read", "writer", "hash-type", "dictionary"},
-	"detect":  {"short", "extended", "hashcat-only", "john-only", "no-color"}, // "read", "writer"
-	"list":    {"no-color"},                                                   // "hashcat-only", "john-only"
-	"samples": {"no-color"},                                                   // "hashcat-only", "john-only"
-	"version": {"no-color"},
+var FlagsPerCommand = map[data.Command][]string{
+	data.CMD_DECODE:  {"short", "read", "writer", "hash-type", "dictionary"},
+	data.CMD_DETECT:  {"short", "extended", "hashcat-only", "john-only", "no-color"}, // "read", "writer"
+	data.CMD_LIST:    {"no-color"},                                                   // "hashcat-only", "john-only"
+	data.CMD_SAMPLES: {"no-color"},                                                   // "hashcat-only", "john-only"
+	data.CMD_VERSION: {"no-color"},
 }
 
 // ____________________Func Add Flags to Command______________
-func AddCommandFlags(cmd *cobra.Command, commandName string) {
+func AddCommandFlags(cmd *cobra.Command, commandName data.Command) {
 	// Add Bool-flags.
 	for _, flagName := range FlagsPerCommand[commandName] {
 		for _, flag := range BoolFlags {
