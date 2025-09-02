@@ -10,14 +10,18 @@ import (
 )
 
 func printMode(modes data.Modes) {
-	output.PrintGreenText(fmt.Sprintf("- %s\n", modes.Name))
+	var sb strings.Builder
+
+	fmt.Fprintf(&sb, "- %s\n", modes.Name)
 
 	if modes.Hashcat != nil {
-		output.PrintGreenText(fmt.Sprintf("  Hashcat: %d\n", *modes.Hashcat))
+		fmt.Fprintf(&sb, "  Hashcat: %d\n", *modes.Hashcat)
 	}
 	if modes.John != nil {
-		output.PrintGreenText(fmt.Sprintf("  John: %s\n", *modes.John))
+		fmt.Fprintf(&sb, "  John: %s\n", *modes.John)
 	}
+
+	output.PrintGreenText(sb.String())
 }
 
 func isSimpleHash(name string) bool {
