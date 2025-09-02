@@ -38,7 +38,7 @@
 | `-r`, `--read <file>` | Read input file containing hashes (format: `user:hash`). |
 | `-w`, `--writer <file>` | Output file to save results (default: `decrypt.txt`). |
 | `-d`, `--dictionary <file>` | Dictionary file to use for cracking. |
-| `-t`, `--hash-type <type>` | Hash type to use (`md5`, `sha1`, `sha256`). Default: `md5`. |
+| `-t`, `--hash-type <type>` | Hash type to use (`md5`, `sha1`, `sha256`...). Default: `md5`. |
 
 ---
 
