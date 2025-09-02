@@ -9,7 +9,6 @@ import (
 	"ghid/output"
 	"ghid/utils"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -38,9 +37,6 @@ func Commands() []*cobra.Command {
 
 func samples(str string) {
 	hash := utils.ParseJson(data.WAY_DATA_JSON)
-	if color.NoColor {
-		output.DisableColorOutput()
-	}
 
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
@@ -51,8 +47,8 @@ func samples(str string) {
 				}
 
 				var out strings.Builder
-				for _, samplesValue := range mode.Samples {
-					out.WriteString(samplesValue + "\n")
+				for _, sample := range mode.Samples {
+					out.WriteString(sample + "\n")
 				}
 				output.PrintBlueText(out.String())
 				return
