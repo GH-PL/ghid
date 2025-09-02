@@ -47,7 +47,7 @@ func Decode(decodeData *DecodeData) {
 	utils.CreateTxt(decodeData.WriterFile, out.String())
 }
 
-func runDecode(passUser, nameHash string, dictionary []string) string {
+func runDecode(passHash, nameHash string, dictionary []string) string {
 
 	var out strings.Builder
 
@@ -58,34 +58,49 @@ func runDecode(passUser, nameHash string, dictionary []string) string {
 
 		out.Reset()
 
-		fmt.Fprintf(&out, "%s [dictionary empty]", passUser)
+		fmt.Fprintf(&out, "%s [dictionary empty]", passHash)
 		return out.String()
 	}
 
 	hashType, ok := HashFromString(nameHash)
 	if !ok {
-		fmt.Fprintf(&out, "%s [unknown hash type]", passUser)
+		fmt.Fprintf(&out, "%s [unknown hash type]", passHash)
 		return out.String()
 	}
 
 	expectedLen := int(digestSizes[hashType]) * 2
-	if expectedLen > 0 && expectedLen != len(passUser) {
+	if expectedLen > 0 && expectedLen != len(passHash) {
+		fmt.Println(passHash, " ", len(passHash))
+
 		fmt.Fprintf(&out, "%s [invalid length for hash type: %s (expected %d)]",
-			passUser, nameHash, expectedLen)
+			passHash, nameHash, expectedLen)
 		return out.String()
 	}
 
 	conText, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	wordChan := make(chan string)
+	wordChan := make(chan string, 1000)
 	resultChan := make(chan string, 1)
 
 	var waitGroup sync.WaitGroup
 
 	//_______________________________________________________________
 
-	var numWorker = runtime.NumCPU()
+	var numWorker = runtime.NumCPU() / 2
+	if numWorker < 1 {
+		numWorker = 1
+	}
+
+	cleanDict := make([]string, 0, len(dictionary))
+	for _, word := range dictionary {
+		word = strings.TrimSpace(word)
+		if word == "" {
+			continue
+		}
+		cleanDict = append(cleanDict, word)
+	}
+
 	for i := 0; i < numWorker; i++ {
 		waitGroup.Add(1)
 		go func() {
@@ -98,7 +113,7 @@ func runDecode(passUser, nameHash string, dictionary []string) string {
 					if !ok {
 						return
 					}
-					if toHash(word, hashType) == passUser {
+					if toHash(word, hashType) == passHash {
 						select {
 						case resultChan <- word:
 							cancel()
@@ -113,11 +128,7 @@ func runDecode(passUser, nameHash string, dictionary []string) string {
 
 	go func() {
 		defer close(wordChan)
-		for _, word := range dictionary {
-			word = strings.TrimSpace(word)
-			if word == "" {
-				continue
-			}
+		for _, word := range cleanDict {
 			select {
 			case <-conText.Done():
 				return
@@ -134,5 +145,5 @@ func runDecode(passUser, nameHash string, dictionary []string) string {
 	if result, ok := <-resultChan; ok {
 		return result
 	}
-	return passUser + " [not found]"
+	return passHash + " [not found]"
 }
