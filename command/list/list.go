@@ -1,10 +1,12 @@
 package list
 
 import (
+	"fmt"
 	"ghid/data"
 	"ghid/flags"
 	"ghid/output"
 	"ghid/utils"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -27,12 +29,16 @@ func Commands() []*cobra.Command {
 
 func showList() {
 	hash := utils.ParseJson(data.WAY_DATA_JSON)
+
 	if color.NoColor {
 		output.DisableColorOutput()
 	}
+
+	var out strings.Builder
 	for _, hashValue := range hash {
 		for _, mode := range hashValue.Modes {
-			output.PrintBlueText(mode.Name)
+			fmt.Fprintf(&out, "%s\n", mode.Name)
 		}
 	}
+	output.PrintBlueText(out.String())
 }
