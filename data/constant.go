@@ -10,3 +10,12 @@ const (
 
 // Int
 const ()
+
+// Name command
+const (
+	CMD_DETECT  string = "detect"
+	CMD_DECODE  string = "decode"
+	CMD_LIST    string = "list"
+	CMD_SAMPLES string = "samples"
+	CMD_VERSION string = "version"
+)

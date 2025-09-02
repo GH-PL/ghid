@@ -28,7 +28,7 @@ func Commands() []*cobra.Command {
 			}
 		},
 	}
-	flags.AddCommandFlags(detectCmd, "detect")
+	flags.AddCommandFlags(detectCmd, data.CMD_DETECT)
 	return []*cobra.Command{detectCmd}
 }
 

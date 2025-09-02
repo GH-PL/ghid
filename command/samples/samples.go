@@ -31,7 +31,7 @@ func Commands() []*cobra.Command {
 		},
 	}
 
-	flags.AddCommandFlags(samplesCmd, "samples")
+	flags.AddCommandFlags(samplesCmd, data.CMD_SAMPLES)
 
 	return []*cobra.Command{samplesCmd}
 }

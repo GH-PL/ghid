@@ -18,7 +18,7 @@ func Commands() []*cobra.Command {
 		},
 	}
 
-	flags.AddCommandFlags(versionCmd, "version")
+	flags.AddCommandFlags(versionCmd, data.CMD_VERSION)
 
 	return []*cobra.Command{versionCmd}
 }

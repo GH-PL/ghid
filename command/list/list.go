@@ -20,7 +20,7 @@ func Commands() []*cobra.Command {
 		},
 	}
 
-	flags.AddCommandFlags(listCmd, "list")
+	flags.AddCommandFlags(listCmd, data.CMD_LIST)
 
 	return []*cobra.Command{listCmd}
 }

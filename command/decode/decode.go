@@ -1,6 +1,7 @@
 package decode
 
 import (
+	"ghid/data"
 	"ghid/flags"
 
 	"github.com/spf13/cobra"
@@ -20,7 +21,7 @@ func Commands() []*cobra.Command {
 			})
 		},
 	}
-	flags.AddCommandFlags(decodeCmd, "decode")
+	flags.AddCommandFlags(decodeCmd, data.CMD_DECODE)
 
 	return []*cobra.Command{decodeCmd}
 }
