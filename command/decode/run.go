@@ -58,26 +58,20 @@ func runDecode(passUser, nameHash string, dictionary []string) string {
 
 		out.Reset()
 
-		out.WriteString(passUser)
-		out.WriteString(" [dictionary empty]")
+		fmt.Fprintf(&out, "%s [dictionary empty]", passUser)
 		return out.String()
 	}
 
 	hashType, ok := HashFromString(nameHash)
 	if !ok {
-		out.WriteString(passUser)
-		out.WriteString(" [unknown hash type]")
+		fmt.Fprintf(&out, "%s [unknown hash type]", passUser)
 		return out.String()
 	}
 
 	expectedLen := int(digestSizes[hashType]) * 2
 	if expectedLen > 0 && expectedLen != len(passUser) {
-		out.WriteString(passUser)
-		out.WriteString(" [invalid length for hash type: ")
-		out.WriteString(nameHash)
-		out.WriteString(" (expected ")
-		out.WriteString(fmt.Sprintf("%d", expectedLen))
-		out.WriteString(")]")
+		fmt.Fprintf(&out, "%s [invalid length for hash type: %s (expected %d)]",
+			passUser, nameHash, expectedLen)
 		return out.String()
 	}
 
