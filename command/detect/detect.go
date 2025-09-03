@@ -17,7 +17,7 @@ func Commands() []*cobra.Command {
 	var detectCmd = &cobra.Command{
 		Use:   "detect [flags] <hash>",
 		Short: "Identify the most probable hash type",
-		Long:  "Identify the most probable hash type",
+		Long:  "Identify the most probable hash type\nExample:\nghid detect e99a18c428cb38d5f260853678922e03",
 		Run: func(cmd *cobra.Command, args []string) {
 			matchHash := matchHashTypes(args)
 			if !matchHash {
@@ -33,9 +33,18 @@ func Commands() []*cobra.Command {
 	return []*cobra.Command{detectCmd}
 }
 
+type Entry struct {
+	Compiled *regexp.Regexp
+	Name     string
+	HashCat  *uint
+	John     *string
+}
+
 var (
-	hashesOnce sync.Once
-	hashes     []utils.Hash
+	entries     []Entry
+	hashesOnce  sync.Once
+	entriesOnce sync.Once
+	hashes      []utils.Hash
 )
 
 func loadJsonHash() []utils.Hash {
@@ -45,32 +54,61 @@ func loadJsonHash() []utils.Hash {
 	return hashes
 }
 
+func Compiled() []Entry {
+	var compiledEntry []Entry
+	hashes = loadJsonHash()
+	for _, hash := range hashes {
+		compiled, err := regexp.Compile(hash.Regex)
+		if err != nil {
+			output.PrintError(errHandler.ErrNotReadFile)
+			continue
+		}
+
+		for _, mode := range hash.Modes {
+			compiledEntry = append(compiledEntry, Entry{
+				Compiled: compiled,
+				Name:     mode.Name,
+				HashCat:  mode.Hashcat,
+				John:     mode.John,
+			})
+		}
+	}
+	return compiledEntry
+}
+
 func matchHashTypes(args []string) bool {
 	found := false
-	loadJsonHash()
+	entriesOnce.Do(func() {
+		entries = Compiled()
+	})
 	for _, arg := range args {
-		if matched := search(arg, hashes); matched {
+		if matched := search(arg, entries); matched {
 			found = true
 		}
 	}
 	return found
 }
 
-func search(arg string, hashes []utils.Hash) bool {
-	for _, hashValue := range hashes {
-		if match, _ := regexp.MatchString(hashValue.Regex, arg); !match {
+func search(arg string, entries []Entry) bool {
+	var found bool = false
+	for _, entry := range entries {
+		if !entry.Compiled.MatchString(arg) {
 			continue
 		}
-		for _, mode := range hashValue.Modes {
-			if !flags.Extended && !isSimpleHash(mode.Name) {
-				continue
-			}
-			printModeByFlags(mode)
+		if !flags.Extended && !isSimpleHash(entry.Name) {
+			continue
 		}
-		return true
+
+		printModeByFlags(utils.Modes{
+			Name:    entry.Name,
+			Hashcat: entry.HashCat,
+			John:    entry.John,
+		})
+
+		found = true
 
 	}
-	return false
+	return found
 }
 
 func printModeByFlags(mode utils.Modes) {
