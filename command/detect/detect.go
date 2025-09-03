@@ -48,29 +48,13 @@ func loadJsonHash() []utils.Hash {
 func matchHashTypes(args []string) bool {
 	found := false
 	loadJsonHash()
+
 	for _, arg := range args {
-		if matched := search(arg, hashes); matched {
+		if matched := search(arg, compiledHashes); matched {
 			found = true
 		}
 	}
 	return found
-}
-
-func search(arg string, hashes []utils.Hash) bool {
-	for _, hashValue := range hashes {
-		if match, _ := regexp.MatchString(hashValue.Regex, arg); !match {
-			continue
-		}
-		for _, mode := range hashValue.Modes {
-			if !flags.Extended && !isSimpleHash(mode.Name) {
-				continue
-			}
-			printModeByFlags(mode)
-		}
-		return true
-
-	}
-	return false
 }
 
 func printModeByFlags(mode utils.Modes) {
@@ -88,3 +72,55 @@ func printModeByFlags(mode utils.Modes) {
 	}
 	printMode(mode)
 }
+
+type CompiledHash struct {
+	Modes []utils.Modes
+	Re    *regexp.Regexp
+}
+
+func loadCompiledHashes() []CompiledHash {
+	raw := utils.ParseJson(data.WAY_DATA_JSON)
+	var list []CompiledHash
+	for _, h := range raw {
+		re := regexp.MustCompile(h.Regex) // компиляция единожды
+		list = append(list, CompiledHash{Modes: h.Modes, Re: re})
+	}
+	return list
+}
+
+var compiledHashes []CompiledHash = loadCompiledHashes()
+
+func search(arg string, hashes []CompiledHash) bool {
+	for _, hv := range hashes {
+		if !hv.Re.MatchString(arg) {
+			continue
+		}
+		for _, mode := range hv.Modes {
+			if !flags.Extended && !isSimpleHash(mode.Name) {
+				continue
+			}
+			printModeByFlags(mode)
+		}
+		return true
+	}
+	return false
+}
+
+/*
+	func search(arg string, hashes []utils.Hash) bool {
+		for _, hashValue := range hashes {
+			if match, _ := regexp.MatchString(hashValue.Regex, arg); !match {
+				continue
+			}
+			for _, mode := range hashValue.Modes {
+				if !flags.Extended && !isSimpleHash(mode.Name) {
+					continue
+				}
+				printModeByFlags(mode)
+			}
+			return true
+
+		}
+		return false
+	}
+*/
