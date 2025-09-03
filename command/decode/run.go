@@ -72,8 +72,6 @@ func runDecode(passHash, nameHash string, dictionary []string, core int) string 
 
 	expectedLen := int(digestSizes[hashType]) * 2
 	if expectedLen > 0 && expectedLen != len(passHash) {
-		fmt.Println(passHash, " ", len(passHash))
-
 		fmt.Fprintf(&out, "%s [invalid length for hash type: %s (expected %d)]",
 			passHash, nameHash, expectedLen)
 		return out.String()
