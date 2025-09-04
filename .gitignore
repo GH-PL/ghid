@@ -5,3 +5,6 @@
 *.so
 *.dylib
 *.env
+
+*.test
+
