@@ -60,7 +60,7 @@ func Compiled() []Entry {
 	for _, hash := range hashes {
 		compiled, err := regexp.Compile(hash.Regex)
 		if err != nil {
-			output.PrintError(errHandler.ErrNotReadFile)
+			//output.PrintError(errHandler.ErrNotReadFile)
 			continue
 		}
 
